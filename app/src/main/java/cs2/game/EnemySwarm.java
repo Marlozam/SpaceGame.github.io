@@ -56,7 +56,7 @@ public class EnemySwarm {
   // This method should choose one enemy at random from the swarm,
   // and have that enemy shoot a bullet. Return that Bullet.
   public Bullet shoot() {
-    int random = (int)Math.random();
+    int random = (int) (Math.random() * swarm.size());
     Enemy ran = swarm.get(random);
     Bullet enemB = new Bullet(this.bullPic, ran.pos.clone(), new Vec2(0, 1)  );
     return enemB;
