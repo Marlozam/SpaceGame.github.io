@@ -17,20 +17,23 @@ public abstract class Sprite {
    */
 
 
-  /*
   // The constructor should initialize the fields of the class
-  public Sprite(Image i, Vec2 p) { }
-  */
+  public Sprite(Image i, Vec2 p) { 
+    this.img = i;
+    this.pos = p;
+  }
 
-  /*
   // This method should draw the image at the current position
-  public void display(GraphicsContext g) { }
-  */
+  public void display(GraphicsContext g) { 
+    g.drawImage(img, pos.getX(), pos.getY(),100, 100);
+  }
 
-  /*
+  
   // This method should change the location/position of the sprite
   // by the amount specified in the parameter delta
-  public void move(Vec2 delta) { }
-   */
+  public void move(Vec2 delta) { 
+     this.pos.addThis(delta);
+  }
+   
 
 }

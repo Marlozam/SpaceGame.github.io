@@ -6,26 +6,46 @@ import javafx.scene.image.Image;
 public class Player extends Sprite {
   private Image bulletPicture;
 
-  /*
+  
   //This constructor should initialize all fields
   //**Remember that some fields are inherited from Sprite
-  public Player(Image avatar, Image bullPic, Vec2 p) { }
-  */
+  public Player(Image avatar, Image bullPic, Vec2 p) { 
+    // keyword suer always has to go before everything else 
+    super(avatar, p);
+    this.bulletPicture = bullPic;
+    
+    
+    
+  }
 
-  /*
+  
   // This method should create a new Bullet object and return it
   // The Bullet should be initialized with the bulletPicture, the
   // current position of the player, and a velocity going up the screen
-  public Bullet shoot() { }
-  */
+  public Bullet shoot(Vec2 vel) { 
+    
+    Bullet shoot = new Bullet(this.bulletPicture, this.pos.clone(), vel);
+    return shoot;
 
-  /*
+  }
+
+  
   // This method should move the player left by some amount
-  public void moveLeft() { }
-  */
+  public void moveLeft() {
+    Vec2 mov= new Vec2(-5,0);
+    this.move(mov );
 
-  /*
+   }
+  // will use this.pos.x then add or subtract it by a number prob good to start with 1 pixel
+  // we would need to either add or subtract based on what specific was we are moving 
+  
+  //
+
+  
   // This method should move the player right by some amount
-  public void moveRight() { }
-  */
+  public void moveRight() { 
+    Vec2 movR = new Vec2(5,0);
+    this.move(movR);
+  }
+  
 }
