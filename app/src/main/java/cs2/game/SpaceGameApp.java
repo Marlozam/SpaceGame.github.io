@@ -1,6 +1,8 @@
 package cs2.game;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
+import java.util.HashSet;
+
 import cs2.util.Vec2;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,7 +16,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
 public class SpaceGameApp extends Application {
+  // now a scope and can be accesed in both timer and here 
+  private EnemySwarm SwarmE;
   
   public void start(Stage stage) {
     stage.setTitle("Walmart Galaga");
@@ -58,33 +63,29 @@ public class SpaceGameApp extends Application {
          Player player1= new Player(img, bullImage, new Vec2(300, 650) );
          
          //new help with this one 
-         EnemySwarm SwarmE = new EnemySwarm(2, 5, enemyi, bullImage);
+          SwarmE = new EnemySwarm(2, 5, enemyi, bullImage);
          ArrayList<Bullet>bullets = new ArrayList<Bullet>();
          ArrayList<Bullet> enemBullets = new ArrayList<Bullet>();
+
+         // making a set for smooth player movement 
+         HashSet<KeyCode> pressed = new HashSet<KeyCode>();
 
          // creating a keyPressed event handeler 
         canvas.requestFocus();
          canvas.setOnKeyPressed( (KeyEvent e) -> {
         //this is where i do stuff
-        if(e.getCode()== KeyCode.LEFT && player1.pos.getX()>5){
-          player1.moveLeft();
-          // now think about how this can stay in the parameters of 800x800
-        }
-        else if(e.getCode() == KeyCode.RIGHT && player1.pos.getX()<700){
-          player1.moveRight(); // have to get this to move right 
-        }
-        else if(e.getCode() == KeyCode.SPACE){
-          Bullet save = player1.shoot(new Vec2(0, -10 ));
-          bullets.add(save);
-          
-           //save.update();
-           // have to use the update() somwhere in order to get the bullet ot move
-
-           
-          
-          //want this to shoot
-        }
+        pressed.add(e.getCode());
+        
       });
+
+      // making the release key 
+      canvas.setOnKeyReleased((KeyEvent e)->{
+        // simplifiedd 
+        pressed.remove(e.getCode());
+        
+      });
+
+
       //////////////////////////////////////////////
       // keypressed event handeler for shooting bullet 
      
@@ -96,27 +97,84 @@ public class SpaceGameApp extends Application {
           //drawing here
           g.setFill(Color.WHITE);
           g.fillRect(0,0,800,800);
-          
 
-          Bullet shootE =SwarmE.shoot();
-          enemBullets.add(shootE);
+          if (Math.random() < .04){
+            Bullet shootE =SwarmE.shoot() ; // * Math.random() and then if it gets 0 or 1  
+            enemBullets.add(shootE);
+          }
 
           player1.display(g);
-          enemy1.display(g);
+          //enemy1.display(g);
           SwarmE.display(g);
+          // this is for smooth transition of ship using keys
+          if (pressed.contains(KeyCode.RIGHT) || pressed.contains(KeyCode.D) ){
+            player1.moveRight();
+          }
+          if (pressed.contains(KeyCode.LEFT) || pressed.contains(KeyCode.A)){
+            player1.moveLeft();
+          }
+          if (pressed.contains(KeyCode.UP) || pressed.contains(KeyCode.W)){
+            player1.moveUp();
+          }
+          if( pressed.contains(KeyCode.DOWN) || pressed.contains(KeyCode.S)){
+            player1.moveDown();
+          }
+          if (pressed.contains(KeyCode.SPACE)){
+            Bullet save = player1.shoot(new Vec2(0, -10 ));
+            bullets.add(save);//save.update();
+          }
           //Bullets saveS
           // want to loop through the arrayList 
            for( int i=0; i< bullets.size(); i++){
             bullets.get(i).update();
             bullets.get(i).display(g);
-
-
           }
+
           for (int j = 0; j< enemBullets.size(); j++){
             enemBullets.get(j).update();
             enemBullets.get(j).display(g);
+          }
+          // for loop for bullet player intersection 
+
+          for ( int i = 0; i< enemBullets.size(); i++){
+            if (player1.intersection(enemBullets.get(i))){
+              enemBullets.remove(i);
+              player1.setter(); 
+            }
+          }
+          // for loop for player bullet hit enemy removing bullet 
+          for( int i=0; i< bullets.size() ; i++){
+            if (SwarmE.intersection(bullets.get(i))){
+              bullets.remove(i);
+            }
+          }
+          //if player intersects with enemy then return player to starting posistion 
+          if(SwarmE.intersection(player1)){
+            player1.setter();
+          }
+          
+          // if player and enemy bullet intersect remove them
+          for(int i = 0; i<bullets.size(); i++){
+            for(int j =0; j<enemBullets.size(); j++){
+              // need to put another if stament saying if i is still valid 
+              // strating pint of the array list 0 end point is the size 
+              if( i >= 0 && i <= bullets.size() ){
+                if (bullets.get(i).intersection(enemBullets.get(j))){
+                  bullets.remove(i);
+                  enemBullets.remove(j);
+                  System.out.println(bullets.size());
+                }
+              }
+            }
+          }
+          // resetting the game and making a new EnemySwarm
+          if(SwarmE.swarm.size() == 0){
+            EnemySwarm nexLevel = new EnemySwarm(2, 5, enemyi, bullImage);
+            SwarmE = nexLevel;
+            nexLevel.display(g);
 
           }
+          
           
           
           

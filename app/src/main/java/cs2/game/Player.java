@@ -33,7 +33,10 @@ public class Player extends Sprite {
   // This method should move the player left by some amount
   public void moveLeft() {
     Vec2 mov= new Vec2(-5,0);
-    this.move(mov );
+    double x = this.pos.getX();
+    if (x > 5 ){
+      this.move(mov);
+    }
 
    }
   // will use this.pos.x then add or subtract it by a number prob good to start with 1 pixel
@@ -45,7 +48,28 @@ public class Player extends Sprite {
   // This method should move the player right by some amount
   public void moveRight() { 
     Vec2 movR = new Vec2(5,0);
-    this.move(movR);
+    double xPos = this.pos.getX();
+    if (xPos <= 700.0){
+      this.move(movR);
+    }
+    
+  }
+  // moving up
+  public void moveUp(){
+    Vec2 movU = new Vec2(0, -5);
+    double goU = this.pos.getY();
+    if ( goU > 100 ){
+      this.move(movU);
+    }
+  }
+  // moving down 
+  public void moveDown(){
+    Vec2 movD = new Vec2(0, 5);
+    double goD = this.pos.getY();
+    if (goD < 670 ){
+      this.move(movD);
+    }
+    
   }
   
 }

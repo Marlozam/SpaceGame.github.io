@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class EnemySwarm {
-  private ArrayList<Enemy> swarm;
+  public ArrayList<Enemy> swarm;
   private Image bullPic;
 
   
@@ -61,6 +61,24 @@ public class EnemySwarm {
     Bullet enemB = new Bullet(this.bullPic, ran.pos.clone(), new Vec2(0, 1)  );
     return enemB;
     //however should I call this method from this class and then put it with in  my KeyPress
+   }
+   // making intersection method 
+  
+   public boolean intersection(Sprite other){
+    // need to just call the intersection that i have made and then make the argument whatever i need
+    // it to be
+    // how should i call the method intersetion when the object is arraylist of enemys 
+    for( int i =0; i< swarm.size(); i++){
+      if (swarm.get(i).intersection(other)){
+        swarm.remove(i);
+        return true; // why should = true when the intersection method in sprite is = false
+        // also right here is where i should remove the enemy if they do intersect 
+
+      }
+
+    }
+    return false; // why should i not use an else stamnet here 
+
    }
   
 }

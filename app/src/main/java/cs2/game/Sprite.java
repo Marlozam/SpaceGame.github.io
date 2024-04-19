@@ -34,6 +34,23 @@ public abstract class Sprite {
   public void move(Vec2 delta) { 
      this.pos.addThis(delta);
   }
+  // can add another method making a setter for where my player originates once shot 
+  public void setter(){
+    this.pos = new Vec2(300, 650);
+  }
+
+  // maing a intersection and using booleans using that they are not intersecting 
+  public boolean intersection( Sprite other){
+    // need to make variables of width and height of player and bullet 
+    // want to check x = width and y = height of object
+    // want to negate final boolean do ths taking final reselt of what we are itersecting and flip it 
+    int width = 100;
+    int height = 100;
+    if (((this.pos.getX() + 100) < other.pos.getX()) || (this.pos.getX() >(other.pos.getX()+100)) || (this.pos.getY() > (other.pos.getY()+100)) || ((this.pos.getY() + 100) < other.pos.getY() )){
+      return false; // Not intersecting at all
+    }
+    else{return true;} // Intersecting
+  }
    
 
 }
