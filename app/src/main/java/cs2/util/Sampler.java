@@ -16,13 +16,14 @@ public class Sampler {
     Scanner scan = new Scanner(f);
     while(scan.hasNextLine()){
         String line = scan.nextLine();
-        // what is this doing 
+        // 
         String[] parts = line.split("\t");
         counts.put(parts[0], Integer.parseInt(parts[1]) );
     }}
     // using catch and exception to catch user errors 
     catch (Exception e){
         e.printStackTrace();
+        //System.out.println("error message" + e.printStackTrace());
     }
 
     // methods 
@@ -76,10 +77,24 @@ public class Sampler {
   }
 
   public String sample() {
+    double prob = 0;
     double num = Math.random();
-    
-    return "apple";
+
+    for(String word : counts.keySet()){
+      double wProb = getProbability(word);
+      prob += wProb;
+
+      if (num <= prob){
+        return word;
+      }
+
+    }
+    // should I put iterator here?
+    // I did;nt really use an iterator 
+    // should I add one?
+    return counts.keySet().iterator().next();
   }
+  // write here I can wrtie my tester code for more cases and be like staic main args
 
 }
 

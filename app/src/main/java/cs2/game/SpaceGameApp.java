@@ -90,17 +90,28 @@ public class SpaceGameApp extends Application {
       // keypressed event handeler for shooting bullet 
      
       
-      
       //g.drawImage(img, 100, 100);
       AnimationTimer timer = new AnimationTimer(){
+
+        private int counter = 0;
+      
         public void handle(long t){
+
+          //right here need to keep decreasing it within the timer and once that variable gets to 0
+          //then I will be able to shoot
+          counter= counter-1;
+
           //drawing here
           g.setFill(Color.WHITE);
           g.fillRect(0,0,800,800);
 
           if (Math.random() < .04){
-            Bullet shootE =SwarmE.shoot() ; // * Math.random() and then if it gets 0 or 1  
-            enemBullets.add(shootE);
+            if(counter <= 0){
+              Bullet shootE =SwarmE.shoot() ; // * Math.random() and then if it gets 0 or 1  
+              enemBullets.add(shootE);
+              counter = 15;
+            }
+            
           }
 
           player1.display(g);
@@ -120,8 +131,12 @@ public class SpaceGameApp extends Application {
             player1.moveDown();
           }
           if (pressed.contains(KeyCode.SPACE)){
-            Bullet save = player1.shoot(new Vec2(0, -10 ));
-            bullets.add(save);//save.update();
+            // make a codition right here if only our variable is 0 we can shoot 
+            if(counter <= 0){
+              Bullet save = player1.shoot(new Vec2(0, -10 ));
+              bullets.add(save);//save.update();
+              counter =15;
+            }
           }
           //Bullets saveS
           // want to loop through the arrayList 

@@ -24,6 +24,10 @@ public class SamplerTester {
           System.out.println(word + "\tfrequency is within " + epsilon + " of " + String.format("%.04f", data.getProbability(word)));
         }
       }
+
     }
+    // so basically would want to write something like if test.sample() doesn't = 10 then print out 
+    //"this is not working "
+    
   }
 }
