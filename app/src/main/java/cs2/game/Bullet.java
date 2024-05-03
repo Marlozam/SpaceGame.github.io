@@ -23,4 +23,7 @@ public class Bullet extends Sprite {
       this.move(this.vel);
   }
   
-}
+    
+  }
+  
+  

@@ -1,4 +1,4 @@
-package cs2.util;
+package cs2.adt;
 import java.util.NoSuchElementException;
 
 /**

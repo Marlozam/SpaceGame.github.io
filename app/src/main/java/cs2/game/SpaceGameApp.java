@@ -1,5 +1,6 @@
 package cs2.game;
 import javafx.animation.AnimationTimer;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -14,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -28,6 +30,8 @@ public class SpaceGameApp extends Application {
     Canvas canvas = new Canvas(800,800);
     stage.setScene(new Scene(new StackPane(canvas)));
     GraphicsContext g = canvas.getGraphicsContext2D();
+
+    
     
     //fields
     //(should i make these doubles ?)
@@ -94,15 +98,21 @@ public class SpaceGameApp extends Application {
       AnimationTimer timer = new AnimationTimer(){
 
         private int counter = 0;
+        double score = 0;
+        double lives = 4;
+        boolean gameOver = false;
       
         public void handle(long t){
+          g.setFill(Color.BLUE);
+          g.fillRect(0,0,800,800);
+          
 
           //right here need to keep decreasing it within the timer and once that variable gets to 0
           //then I will be able to shoot
           counter= counter-1;
 
           //drawing here
-          g.setFill(Color.WHITE);
+          g.setFill(Color.BLUEVIOLET);
           g.fillRect(0,0,800,800);
 
           if (Math.random() < .04){
@@ -150,19 +160,35 @@ public class SpaceGameApp extends Application {
             enemBullets.get(j).display(g);
           }
           // for loop for bullet player intersection 
-
+          // keeping track of the amount of lives the player has 
+          
           for ( int i = 0; i< enemBullets.size(); i++){
             if (player1.intersection(enemBullets.get(i))){
               enemBullets.remove(i);
               player1.setter(); 
+              lives -=1;
+              System.out.println("Live remaining: "+lives);
             }
+            
           }
+          g.setFill(Color.BLACK);
+          g.setStroke(Color.rgb(0,0,0));
+          g.fillText("Lives left: "+lives, 45, 440);
           // for loop for player bullet hit enemy removing bullet 
+          // also score for player 
+          // made rect for the displaying of lives and score 
+          g.strokeRect(40, 400, 100, 60);
           for( int i=0; i< bullets.size() ; i++){
             if (SwarmE.intersection(bullets.get(i))){
               bullets.remove(i);
+              score += 50;
+              System.out.println("your score: "+score);
             }
+
           }
+          g.setFill(Color.BLACK);
+          g.setStroke(Color.rgb(0,0,0));
+          g.fillText("Score: "+score, 45, 420);
           //if player intersects with enemy then return player to starting posistion 
           if(SwarmE.intersection(player1)){
             player1.setter();
@@ -182,12 +208,39 @@ public class SpaceGameApp extends Application {
               }
             }
           }
+          // these for loops will remove the bullets if they go outside the screen
+          for(int i=0; i<bullets.size(); i++){
+            if(bullets.get(i).pos.getY() < 0){
+              bullets.remove(i);
+            }
+          }
+          for(int i=0; i< enemBullets.size(); i++){
+            if(enemBullets.get(i).pos.getY() > 800){
+              enemBullets.remove(i);
+            }
+          }
+        
           // resetting the game and making a new EnemySwarm
           if(SwarmE.swarm.size() == 0){
             EnemySwarm nexLevel = new EnemySwarm(2, 5, enemyi, bullImage);
             SwarmE = nexLevel;
             nexLevel.display(g);
-
+          }
+          // GameOver
+          if(lives == 0){
+            gameOver = true;
+          }
+          if (gameOver == true){
+            g.setFill(Color.RED);
+            g.fillRect(0,0,800,800);
+            int fontSize = 50;
+            g.setFont(new Font("Arial", fontSize));
+            g.setFill(Color.BLACK);
+            g.setStroke(Color.rgb(0,0,0));
+            g.fillText("GAME OVER", 260,400);
+            g.fillText("TOTAL SCORE: "+score, 160,450);
+            
+            
           }
           
           
